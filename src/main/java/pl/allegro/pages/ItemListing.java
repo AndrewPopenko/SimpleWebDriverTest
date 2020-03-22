@@ -45,8 +45,11 @@ public class ItemListing {
             String[] strArr = item.getText().trim().split("\n");
 
             for (String str: strArr) {
-                if (Character.isDigit(str.charAt(0))) {
-                    String d = str.substring(0, str.length()-2).replace(",", ".").replaceAll("\\s", "");
+                String template = "zł";
+                String substr = str.substring(0, str.length()-2);
+                if (Character.isDigit(str.charAt(0)) &&
+                        str.substring(str.length()-2).equals(template)) {
+                    String d = substr.replace(",", ".").replaceAll("\\s", "");
                     float cost = Float.parseFloat(d);
                     if (cost > max) {
                         max = cost;
@@ -57,6 +60,10 @@ public class ItemListing {
         }
 
         log.info("znaleziono " + list.size() + " artykułów na liście");
-        log.info("maksymalna cena na liście = " + max);
+        if (max > -1) {
+            log.info("maksymalna cena na liście = " + max);
+            float withVat = (float) (max + (max*0.23));
+            log.info("cena + 23% = " + withVat);
+        }
     }
 }
